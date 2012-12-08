@@ -42,7 +42,7 @@ var SetElement = function () {
         if (savelist != null) {
             var itemlist = savelist.getSaveSetList();
             for (var i = 0; i < itemlist.length; i++) {
-                if (itemlist[i].character == character) {
+                if (itemlist[i].url == location.href) {
                     form += '<option value=' + i + '>' + itemlist[i].name + '</option>';
                     optionCount++;
                 }
@@ -54,6 +54,18 @@ var SetElement = function () {
         form += '<input type="button" value="書き込む" id="ats_save"/>'
         form += '<input type="button" value="削除する" id="ats_delete"/>'
         form += '<input type="button" value="ファイル保存する" id="ats_download"/>'
+        form += '<BR><select name="ats_list" id="ats_list_nourl">';
+        if (savelist != null) {
+            var itemlist = savelist.getSaveSetList();
+            for (var i = 0; i < itemlist.length; i++) {
+		var url = location.href;
+                if (itemlist[i].url != location.href && itemlist[i].character == character) {
+                    form += '<option value=' + i + '>' + itemlist[i].name + '</option>';
+                }
+            }
+        }
+        form += '</select>';
+        form += '<input type="button" value="他ページの台詞セットをこのページ用にする" id="ats_seturl"/>'
         form += '</form>';
         $('div.cut-in-imgb').append(form);
         $('#ats_add').click(function () {
@@ -76,6 +88,10 @@ var SetElement = function () {
             setter.atsDownload();
             setter.setElement();
         });
+        $('#ats_seturl').click(function () {
+            setter.atsAdd();
+            setter.setElement();
+        });
         if (optionCount == 0){
             var valid = window.confirm("台詞セットがひとつも保存されていません。保存しますか？");
             if (valid) {
@@ -95,14 +111,16 @@ var SetElement = function () {
         var name = window.prompt("追加する台詞セットの名称を入力してください", "");
         if (name == "" || name == null) name = 'defult';
         parser.parse();
-        savelist.addInputSet(parser.character, name, parser.list);
+	var character = $('div.name').text();
+//	var name = $('#ats_list option:selected').text();
+        savelist.addInputSet(character,location.href, name, parser.list);
     };
     this.atsLoad = function () {
         var valid = window.confirm("台詞セットを読み込みますか");
         if (valid) {
             var character = $('div.name').text();
             var name = $('#ats_list option:selected').text();
-            var target = savelist.getSaveSet(character, name);
+            var target = savelist.getSaveSet(character,location.href, name);
             if (target >= 0) {
                 var array = savelist.list[target].getInputList();
                 this.setValue(array);
@@ -116,7 +134,7 @@ var SetElement = function () {
             var name = $('#ats_list option:selected').text();
             if (name == "" || name == null) name = 'defult';
             parser.parse();
-            savelist.addInputSet(parser.character, name, parser.list);
+            savelist.addInputSet(character,location.href, name, parser.list);
         }
     };
     this.atsDelete = function () {
@@ -124,7 +142,7 @@ var SetElement = function () {
         if (valid) {
             var character = $('div.name').text();
             var name = $('#ats_list option:selected').text();
-            savelist.removeSaveSet(character, name);
+            savelist.removeSaveSet(location.href, name);
         }
     };
     this.atsDownload = function () {
@@ -133,6 +151,16 @@ var SetElement = function () {
             var filename = "auctextsave.txt";
 			var text = savelist.jsonstr;
             saveText(text,filename);
+        }
+    };
+    this.atsSaveUrl = function () {
+        var valid = window.confirm("この台詞セットをこのURL用にしますか");
+        if (valid) {
+            var character = $('div.name').text();
+            var name = $('#ats_list_nourl option:selected').text();
+            if (name == "" || name == null) name = 'defult';
+            parser.parse();
+            savelist.setSaveSetUrl(character, name);
         }
     };
 };
@@ -190,12 +218,16 @@ var InputSetList = function () {
 var SaveSet = function () {
     this.character = "";
     this.name = "";
+    this.url = "";
     this.inputlist = new InputSetList;
     this.setCharacter = function (character) {
         this.character = character;
     };
     this.setName = function (name) {
         this.name = name;
+    };
+    this.setUrl = function (url) {
+        this.url = url;
     };
     this.pushInputSet = function (name, value) {
         this.inputlist.pushItem(name, value);
@@ -240,43 +272,61 @@ var SaveList = function () {
         }
         this.save();
     };
-    this.addSaveSet = function (character, name) {
-        if (this.getSaveSet(character, name) < 0) {
+    this.addSaveSet = function (character, url, name) {
+        if (this.getSaveSet(url, name) < 0) {
             var saveset = new SaveSet();
             saveset.setCharacter(character);
+            saveset.setUrl(url);
             saveset.setName(name);
             this.list.push(saveset);
         }
         this.save();
-        return this.getSaveSet(character, name);
+        return this.getSaveSet(url, name);
     };
-    this.removeSaveSet = function (character, name) {
-        var target = this.getSaveSet(character, name);
+    this.removeSaveSet = function (url, name) {
+        var target = this.getSaveSet(url, name);
         if (target >= 0) {
             this.list.splice(target, 1);
         }
         this.save();
-        return this.getSaveSet(character, name);
+        return this.getSaveSet(url, name);
     };
-
     this.getSaveSetList = function () {
         var list = [];
         for (var i = 0; i < this.list.length; i++) {
-            var data = {
+	    var data = {
+		url: this.list[i].url,
                 character: this.list[i].character,
-                name: this.list[i].name
-            }
-            list.push(data);
+		name: this.list[i].name
+	    }
+	    list.push(data);
         }
         return list;
     };
-    this.getInputList = function (character, name) {
+    this.getInputList = function (url, name) {
         var array = [];
-        var target = getSaveSet(character, name);
+        var target = getSaveSet(character,url, name);
         if (target >= 0) return this.list[target].inputlist.getInputList();
         return null;
     };
-    this.getSaveSet = function (character, name) {
+    this.setSaveSetUrl = function (character, name) {
+        for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].character == character && this.list[i].name == name) {
+		this.list[i].setUrl(location.href);
+                return i;
+            }
+        }
+        return -1;
+    };
+    this.getSaveSet = function (url, name) {
+        for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].url == url && this.list[i].name == name) {
+                return i;
+            }
+        }
+        return -1;
+    };
+    this.getSaveSetCharacter = function (character, name) {
         for (var i = 0; i < this.list.length; i++) {
             if (this.list[i].character == character && this.list[i].name == name) {
                 return i;
@@ -284,8 +334,8 @@ var SaveList = function () {
         }
         return -1;
     };
-    this.addInputSet = function (character, name, array) {
-        var savesetnum = this.addSaveSet(character, name);
+    this.addInputSet = function (character,url, name, array) {
+        var savesetnum = this.addSaveSet(character,url, name);
         this.list[savesetnum].initInputSet();
         this.list[savesetnum].pushInputSetArray(array);
         this.save();
@@ -294,7 +344,7 @@ var SaveList = function () {
         var array = [];
         var target = JSON.parse(str);
         for (var i = 0; i < target.list.length; i++) {
-            this.addInputSet(target.list[i].character, target.list[i].name, target.list[i].inputlist.list)
+            this.addInputSet(target.list[i].character,target.list[i].url, target.list[i].name, target.list[i].inputlist.list)
         }
     };
 };

@@ -8,5 +8,5 @@
    "manifest_version": 2,
    "name": "Auc Text Save",
    "permissions": [ "tabs", "http://suc.au-chronicle.jp/", "unlimitedStorage" ],
-   "version": "2012.11.28"
+   "version": "2012.12.8"
 }
