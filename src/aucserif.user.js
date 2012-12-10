@@ -120,7 +120,7 @@ var SetElement = function () {
         if (valid) {
             var character = $('div.name').text();
             var name = $('#ats_list option:selected').text();
-            var target = savelist.getSaveSet(character,location.href, name);
+            var target = savelist.getSaveSet(location.href, name);
             if (target >= 0) {
                 var array = savelist.list[target].getInputList();
                 this.setValue(array);
