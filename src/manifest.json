@@ -1,12 +1,29 @@
-{
-   "content_scripts": [ {
-      "js": [ "jquery.min.js", "aucserif.user.js" ],
-      "matches": [ "http://suc.au-chronicle.jp/web/characters/edit_serif/*", "http://suc.au-chronicle.jp/web/characters/edit_serif_personal/*" ]
-   } ],
-   "description": "\u82F1\u96C4\u30AF\u30ED\u30CB\u30AF\u30EB \u30B5\u30AF\u30BB\u30B9\u30B5\u30FC\u30D0\u306B\u304A\u3051\u308B\u30AD\u30E3\u30E9\u306E\u53F0\u8A5E\u306E\u30BB\u30FC\u30D6\uFF06\u30ED\u30FC\u30C9\u3092\u53EF\u80FD\u3068\u3059\u308B\u62E1\u5F35\u3067\u3059\u3002",
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC8NCY0nX3jfSqbNOGZemwVs0I+O/66Hm6HkbiY4hEjblgk5CsLfhRVs8Z5nKV6pTNHYdikM8gSzMWylKchQpMffxFwSY0DxmAvGLISsN2tvT8DjLKWM8bGg274thc9y3pG93+x2OaHkwXW28MzcmmgSUbg5cb7F3ERln4leOW/awIDAQAB",
-   "manifest_version": 2,
-   "name": "Auc Text Save",
-   "permissions": [ "tabs", "http://suc.au-chronicle.jp/", "unlimitedStorage" ],
-   "version": "2012.12.10"
+﻿{
+  // Required
+  "name": "Auc Tools",
+  "version": "2013.4.10",
+  "manifest_version": 2,
+  // Recommended
+  "description": "英雄クロニクルの便利ツールの予定",
+  // Add any of these that you need
+  "content_scripts": [
+    {
+      "matches": [
+        "http://suc.au-chronicle.jp/web/characters/edit_serif/*",
+        "http://suc.au-chronicle.jp/web/characters/edit_serif_personal/*"
+        ],
+      "js": ["jquery.min.js", "aucserif.user.js"]
+    },
+    {
+      "matches": [
+        "http://suc.au-chronicle.jp/web/*"
+        ],
+      "js": ["jquery.min.js", "aucbbsnotify.user.js"]
+    }
+  ],
+  "permissions": [
+    "tabs",
+    "http://suc.au-chronicle.jp/",
+    "unlimitedStorage"
+  ]
 }
