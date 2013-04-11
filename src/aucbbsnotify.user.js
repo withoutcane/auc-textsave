@@ -7,22 +7,29 @@
 // @charset        	UTF-8
 // ==/UserScript==
 
-var INITBBSURL = "http://suc.au-chronicle.jp/web/forces/bbs_history";
-var BBSURL = "http://suc.au-chronicle.jp/web/forces/bbs_history/1?filter=1234";
+var HOST = "http://suc.au-chronicle.jp";
+var INITBBSURL = "/web/forces/bbs_history";
+var BBSURL = "/web/forces/bbs_history/1?filter=1234";
 var UNDEF = "undefined";
 
 var beforeForm = "";
 
 var main = function () {
-	getBbs(BBSURL,setElement);
+	getBbs(HOST+BBSURL,setElement);
 };
 
 var setElement = function(newbbs,nextpage){
-	if(newbbs == null || $(document).is('div#bbsnotify')) {
+	console.log("setElement:"+newbbs+"***"+nextpage);
+
+	if($(document).is('div#bbsnotify')) {
 		//なんもしない
-	} else if(newbbs == UNDEF && nextpage != UNDEF) {
+		console.log('not:'+newbbs);
+	} else if(newbbs == 'undefined' && nextpage == 'undefined') {
+		//なんもしない
+		console.log('not:'+newbbs);
+	} else if(newbbs == 'undefined' && nextpage != 'undefined') {
 		//次のページを読みに行ってみる
-		getBbs(nextpage,setElement);
+		getBbs(HOST+nextpage,setElement);
 	} else {
 		var a = '<div id="bbsnotify"><br><a href="'+newbbs+'"> 掲示板に新着記事があるようです</a></div>';
 		$('div#title').append(a);
