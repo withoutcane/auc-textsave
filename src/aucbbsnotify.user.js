@@ -3,49 +3,82 @@
 // @namespace		http://d.hatena.ne.jp/withoutcane/
 // @include		http://suc.au-chronicle.jp/*
 // @match 		http://suc.au-chronicle.jp/*
-// @version		0.0.1
+// @version		0.0.2
 // @charset        	UTF-8
 // ==/UserScript==
 
-var bbs_url = "http://suc.au-chronicle.jp/web/forces/bbs_history?filter=12349";
+var INITBBSURL = "http://suc.au-chronicle.jp/web/forces/bbs_history";
+var BBSURL = "http://suc.au-chronicle.jp/web/forces/bbs_history/1?filter=1234";
+var UNDEF = "undefined";
 
+var beforeForm = "";
 
 var main = function () {
-	getBbs(setElement);
+	getBbs(BBSURL,setElement);
 };
-var setElement = function(url){
-	if(url == 'undefined' || url == null) {
-		//なんもしない
 
-	}else {
-		var a = '<br><a href="'+url+'"> 掲示板ブックマーク1ページ目に新着記事があるようです</a>';
+var setElement = function(newbbs,nextpage){
+	if(newbbs == null || $(document).is('div#bbsnotify')) {
+		//なんもしない
+	} else if(newbbs == UNDEF && nextpage != UNDEF) {
+		//次のページを読みに行ってみる
+		getBbs(nextpage,setElement);
+	} else {
+		var a = '<div id="bbsnotify"><br><a href="'+newbbs+'"> 掲示板に新着記事があるようです</a></div>';
 		$('div#title').append(a);
 	}
 };
 
-var getBbs = function(callback){
+var getBbs = function(url,callback){
+	console.log("getBbs:" + url);
+	var targeturl = url;
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function(data) {
 		if (xhr.readyState == 4) {
 			if (xhr.status == 200) {
-				var data = parseBbs(xhr.responseText);
-				callback(data);
+				var newbbs = getNewArticleUrl(xhr.responseText);
+				var nextpage = getNextUrl(xhr.responseText);
+				var filter = getFilter(xhr.responseText);
+				console.log(filter);
+				callback(newbbs,nextpage);
 			} else {
-				callback(null);
+				callback(null,null);
 			}
 		}
 	}
 	// Note that any URL fetched here must be matched by a permission in
 	// the manifest.json file!
-	xhr.open('GET', bbs_url, true);
+	xhr.open('GET', url, true);
 	xhr.send();
 };
-var parseBbs = function(response){
+
+var getNewArticleUrl = function(response){
 	var b = $(response);
 	var t = b.find('img[src*="bbs_res_new.gif"]').parent('td').children('a').attr('href');
 	return t;
 };
 
+var getNextUrl = function(response){
+	var b = $(response);
+	var t = b.find('span.pager-rt').children('a').attr('href');
+	return t;
+};
+
+//フィルタの設定状況取得用。実験的
+var getFilter = function(response){
+	var b = $(response);
+	var a = jQuery.makeArray(b.find('div.mail-selector').find('input[type="checkbox"][checked="checked"]'));
+	var t = "";
+	console.log(a);
+	for (var i in a) {
+		t += a[i].value;
+	};
+	return t;
+};
+
+
+
+//callback　debug用
 var finish = function(arg) {
 	console.log("finish");
 };

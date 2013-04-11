@@ -1,7 +1,7 @@
 ﻿{
   // Required
   "name": "Auc Tools",
-  "version": "2013.4.10",
+  "version": "2013.4.11",
   "manifest_version": 2,
   // Recommended
   "description": "英雄クロニクルの便利ツールの予定",
