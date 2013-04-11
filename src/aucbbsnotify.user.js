@@ -20,19 +20,19 @@ var main = function () {
 
 var setElement = function(newbbs,nextpage){
 	console.log("setElement:"+newbbs+"***"+nextpage);
-
-	if($(document).is('div#bbsnotify')) {
-		//なんもしない
-		console.log('not:'+newbbs);
-	} else if(newbbs == 'undefined' && nextpage == 'undefined') {
-		//なんもしない
-		console.log('not:'+newbbs);
-	} else if(newbbs == 'undefined' && nextpage != 'undefined') {
+	if(newbbs) {
+		//リンク
+		console.log('set:'+newbbs);
+		if ($(document).is('div#bbsnotify')){
+			//なんもしない
+		}else{
+			var a = '<div id="bbsnotify"><br><a href="'+newbbs+'"> 掲示板に新着記事があるようです</a></div>';
+			$('div#title').append(a);			
+		}
+	} else if(nextpage) {
 		//次のページを読みに行ってみる
+		console.log('get:'+nextpage);
 		getBbs(HOST+nextpage,setElement);
-	} else {
-		var a = '<div id="bbsnotify"><br><a href="'+newbbs+'"> 掲示板に新着記事があるようです</a></div>';
-		$('div#title').append(a);
 	}
 };
 
