@@ -57,10 +57,20 @@
         var lv = b.find('div.lv').text();
         var loop = b.find('span[title="今期転生回数"]').text();
         var pp = b.find('table#charasheet_status_ta2').find("tr:last").text();
+        var nickname = b.find('div.nickname').text();
+        var name = b.find('div.name').text();
+        var cost = b.find('div.cost').text();
+        var forcename = b.find('div.forcename').text();
+        var guild = b.find('div.guild').text();
         var obj = {
             lv:lv,
             loop:loop,
-            pp:pp
+            pp:pp,
+            nickname:nickname,
+            name:name,
+            cost:cost,
+            forcename:forcename,
+            guild:guild
         }; 
         return obj;
     };
