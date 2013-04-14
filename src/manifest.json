@@ -1,10 +1,10 @@
 ﻿{
   // Required
   "name": "Auc Tools",
-  "version": "2013.4.14",
+  "version": "2013.4.15",
   "manifest_version": 2,
   // Recommended
-  "description": "英雄クロニクルの便利ツールの予定",
+  "description": "英雄クロニクルの便利ツール",
   // Add any of these that you need
   "content_scripts": [
     {
@@ -13,6 +13,12 @@
         "http://suc.au-chronicle.jp/web/characters/edit_serif_personal/*"
         ],
       "js": ["jquery.min.js", "aucserif.user.js"]
+    },
+    {
+      "matches": [
+        "http://suc.au-chronicle.jp/web/characters/index/*"
+        ],
+      "js": ["jquery.min.js", "auclvnotify.user.js"]
     },
     {
       "matches": [
