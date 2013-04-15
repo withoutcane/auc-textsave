@@ -24,7 +24,7 @@
 		if(newbbs) {
 			//リンク
 			console.log('set:'+newbbs);
-			if ($(document).is('div#bbsnotify')){
+			if ($('html').is('div#bbsnotify')){
 				//なんもしない
 			}else{
 				var a = '<div id="bbsnotify"><br><a href="'+newbbs+'"> 掲示板に新着記事があるようです</a></div>';

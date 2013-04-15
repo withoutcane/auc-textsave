@@ -49,7 +49,7 @@
         var ulCss = {
             "line-height":"4em"
         };
-        $("div#force_box_2").find("div.baropen").find("ul.bar-btn").find("li.main-btn").append(a);
+        $("div#force_box_2").find("div.baropen").find("ul.bar-btn").find("li.main-btn").before(a);
         $("div:last").after(ipop);
         $("div#ipop").css(ipopCss);
       　　$("div#ipop_title").css(ipopTitleCss);

@@ -1,7 +1,7 @@
 ﻿{
   // Required
   "name": "Auc Tools",
-  "version": "2013.4.16",
+  "version": "2013.4.17",
   "manifest_version": 2,
   // Recommended
   "description": "英雄クロニクルの便利ツール",
@@ -13,6 +13,12 @@
         "http://suc.au-chronicle.jp/web/characters/edit_serif_personal/*"
         ],
       "js": ["jquery.min.js", "aucserif.user.js"]
+    },
+    {
+      "matches": [
+        "http://suc.au-chronicle.jp/web/*/bbs_child?*"
+        ],
+      "js": ["jquery.min.js", "aucbbstools.user.js"]
     },
     {
       "matches": [
