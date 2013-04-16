@@ -16,19 +16,15 @@
     };
 
     var setElement = function(){
-        var a = "<ul class='bar-btn'><li class='main-btn' id='gobottom'><a title='記事下部へ'>記事下部へ</a></li></ul>";
+        var a = "<div id='tools'><ul id='btns' class='bar-btn'><li class='main-btn' id='gobottom'><a title='記事下部へ'>記事下部へ</a></li></ul></div>";
+        var b = "<>";
         $("div.bbs").prepend(a);
         $("#gobottom").click(function(evt){
             evt.preventDefault();
             console.log($('div.bbs-board-re:last'));
-//            var targetoffset = $('div.bbs-board-re:last').offset().top;
             var targetoffset = $('a[name="bbs_bottom"]').offset().top;
             console.log(targetoffset);
             window.scrollBy(0,targetoffset);
-
-//            $('body').animate({scrollTop: targetoffset});
-
-//            goBottom('div.bbs-board-re:last');
         });
      };
 
