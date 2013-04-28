@@ -16,23 +16,81 @@
     };
 
     var setElement = function(){
-        var a = "<div id='tools'><ul id='btns' class='bar-btn'><li class='main-btn' id='gobottom'><a title='記事下部へ'>記事下部へ</a></li></ul></div>";
-        var b = "<>";
-        $("div.bbs").prepend(a);
-        $("#gobottom").click(function(evt){
+        var bbs = "<div class='bbs-board'><div class='btn-box'><ul class='bar-btn'>";
+        bbs += "<li class='main-btn gotop'><a title='最初の記事へ移動'>最初の記事</a></li>";
+        bbs += "<li class='main-btn gobottom'><a title='最後の記事へ移動'>最後の記事</a></li>";
+        bbs += "<li class='main-btn allres'><a title='全ての記事へレスする'>全記事レス</a></li>";
+        bbs += "</ul></div></div><br>";
+        var update = "<a class='gotop' title='最初の記事へ'>最初の記事</a><a class='gobottom' title='最後の記事へ'>最後の記事</a>";
+        // $("div.bbs").prepend(bbs);
+//        $("div.bbs").before(bbs);
+        $("div.bbs:first").before(bbs);
+        $("div.bbs-board-re:first").before(bbs);
+        $("div.bbs-board-re:not(div.bbs-board-re:last):last").after(bbs);
+//        $("div.sbbs-update").parent().apend(bbs);
+        // $("#gotop").click(function(evt){
+        //     evt.preventDefault();
+        //     scrollTarget('div.bbs-board-re:not(div.bbs-board-re:last):first');
+        // });
+        // $("#gobottom").click(function(evt){
+        //     evt.preventDefault();
+        //     scrollTarget('div.bbs-board-re:not(div.bbs-board-re:last):last');
+        // });
+        $(".gotop").click(function(evt){
             evt.preventDefault();
-            console.log($('div.bbs-board-re:last'));
-            var targetoffset = $('a[name="bbs_bottom"]').offset().top;
-            console.log(targetoffset);
-            window.scrollBy(0,targetoffset);
+            scrollTarget('div.bbs-con:not(div.bbs-con:last):first');
+        });
+        $(".gobottom").click(function(evt){
+            evt.preventDefault();
+            scrollTarget('div.bbs-con:not(div.bbs-con:last):last');
+        });
+        $(".allres").click(function(evt){
+            evt.preventDefault();
+            allResponse();
         });
      };
 
-    var goBottom = function(target){
-        var $obj = $(target);
-        if($obj.length == 0) return;
-        $obj.scrollTop($obj.scrollHeight);
-    }
+    var scrollTarget = function(target){
+        var target = $(target);
+        var targetoffset = target.offset().top;
+        var scroll_top = $(document).scrollTop();
+        window.scrollBy(0,targetoffset-scroll_top);
+    };
+
+    var getResText = function(map) {
+        var texts = "";
+        for(var i in map) {
+            var text = ">>" + i + map[i].name + "\n";
+            var splittext = map[i].content.split(/\r\n|\r|\n/);
+            for (var j in splittext) {
+                var target = splittext[j].replace(/^\s*(.*)/,"$1");
+                if (target != "") text += ">" + target + "\n";
+            }
+            texts += text + "\n\n"; 
+        }
+        return texts;
+    };
+
+    var allResponse = function(){
+        var forceid = $("div.forceid").text();
+        var target = $("div.bbs-board-re:has(span.forceid:contains("+ forceid + ")):not(div.bbs-board-re:last):last ~ div.bbs-board-re");
+        var map = {};
+        target.each(function(){
+            var res_no = $(this).find("span.res-no").text();
+            var name = $(this).find("span.bbs-force").text();
+            var id = $(this).find("span.forceid").text();
+            var content = $(this).find("td.td_b2").text();
+            map[res_no] = {
+                name:name,
+                id:id,
+                content:content
+            };
+        });
+        console.log(map);
+        var texts = getResText(map);
+        $("div.textarea_box").find("textarea#add_comment_reply_text").val(texts);
+        scrollTarget("div.textarea_box");
+    };
 
     //callback　debug用
     var finish = function(arg) {
