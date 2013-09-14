@@ -48,6 +48,10 @@
             evt.preventDefault();
             allResponse();
         });
+		$('a.forceid').click(function(e){
+			e.preventDefault();
+			$.simplePopup();
+		});
      };
 
     var scrollTarget = function(target){

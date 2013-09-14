@@ -1,7 +1,7 @@
 {
   // Required
   "name": "Auc Tools",
-  "version": "2013.4.19",
+  "version": "2013.9.15",
   "manifest_version": 2,
   // Recommended
   "description": "英雄クロニクルの便利ツール",
@@ -9,36 +9,43 @@
   "content_scripts": [
     {
       "matches": [
+        "http://suc.au-chronicle.jp/web/*"
+        ],
+      "js": ["js/jquery.min.js", "js/aucbbsnotify.user.js", "js/contents_su.js"]
+    },
+    {
+      "matches": [
         "http://suc.au-chronicle.jp/web/characters/edit_serif/*",
         "http://suc.au-chronicle.jp/web/characters/edit_serif_personal/*"
         ],
-      "js": ["jquery.min.js", "aucserif.user.js"]
+      "js": ["js/jquery.min.js", "js/aucserif.user.js"]
     },
     {
       "matches": [
         "http://suc.au-chronicle.jp/web/*/bbs_child?*"
         ],
-      "js": ["jquery.min.js", "aucbbstools.user.js"]
+      "js": ["js/jquery.min.js","js/jquery.simplePopup.pack.js","js/aucbbstools.user.js"]
     },
     {
       "matches": [
         "http://suc.au-chronicle.jp/web/characters/index/*"
         ],
-      "js": ["jquery.min.js", "auclvnotify.user.js"]
+      "js": ["js/jquery.min.js", "js/auclvnotify.user.js"]
     },
     {
       "matches": [
         "http://suc.au-chronicle.jp/web/forces/index"
         ],
-      "js": ["jquery.min.js", "auclvcheck.user.js"]
-    },
-    {
-      "matches": [
-        "http://suc.au-chronicle.jp/web/*"
-        ],
-      "js": ["jquery.min.js", "aucbbsnotify.user.js"]
+      "js": ["js/jquery.min.js", "js/auclvcheck.user.js"]
     }
   ],
+  "options_page": "fancy-settings/source/index.html",
+  "background": {"page":"html/background.html"},
+  "browser_action": {
+    "default_icon": "img/favicon-000.png",
+    "default_title": "Auc Tools",
+    "default_popup": "html/popup.html"
+  },
   "permissions": [
     "tabs",
     "http://suc.au-chronicle.jp/",
