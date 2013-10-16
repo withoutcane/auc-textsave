@@ -22,20 +22,9 @@
         bbs += "<li class='main-btn allres'><a title='全ての記事へレスする'>全記事レス</a></li>";
         bbs += "</ul></div></div><br>";
         var update = "<a class='gotop' title='最初の記事へ'>最初の記事</a><a class='gobottom' title='最後の記事へ'>最後の記事</a>";
-        // $("div.bbs").prepend(bbs);
-//        $("div.bbs").before(bbs);
         $("div.bbs:first").before(bbs);
         $("div.bbs-board-re:first").before(bbs);
         $("div.bbs-board-re:not(div.bbs-board-re:last):last").after(bbs);
-//        $("div.sbbs-update").parent().apend(bbs);
-        // $("#gotop").click(function(evt){
-        //     evt.preventDefault();
-        //     scrollTarget('div.bbs-board-re:not(div.bbs-board-re:last):first');
-        // });
-        // $("#gobottom").click(function(evt){
-        //     evt.preventDefault();
-        //     scrollTarget('div.bbs-board-re:not(div.bbs-board-re:last):last');
-        // });
         $(".gotop").click(function(evt){
             evt.preventDefault();
             scrollTarget('div.bbs-con:not(div.bbs-con:last):first');
@@ -48,10 +37,10 @@
             evt.preventDefault();
             allResponse();
         });
-		$('a.forceid').click(function(e){
-			e.preventDefault();
-			$.simplePopup();
-		});
+		// $('a.forceid').click(function(e){
+		// 	e.preventDefault();
+		// 	$.simplePopup();
+		// });
      };
 
     var scrollTarget = function(target){
