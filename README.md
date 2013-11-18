@@ -1,5 +1,11 @@
 # auc-tools
 -----------
+##注意
+Windows版ChromeではChromeウェブストアに公開されてないプラグインは利用できなくなりました。
+詳細：http://www.lifehacker.jp/2013/11/131117chrome_google.html
+利用するためにはソースコードを全てダウンロードして、開発者としてローカルでデプロイする必要があります。
+方法：http://developer.chrome.com/extensions/getstarted.html#unpacked
+
 ##解説
 本ツールは英雄クロニクル（サクセスサーバ）における便利機能を提供するChrome Extensionです。
 現時点では以下の機能を有します。
