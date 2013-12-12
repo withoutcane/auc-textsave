@@ -16,7 +16,7 @@
     var flag = false;
 
     var main = function () {
-        setElement();
+//        setElement();
 //        ipop();
     };
 
